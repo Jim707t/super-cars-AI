@@ -1,5 +1,10 @@
 import pygame as pg
 
+"""
+# I'm trying to write a Ml models who can follow the perfectly and implimente it 
+# in my Cars this is just some test. It ye what we can call an AI ah ah.
+"""
+# By the way it's will use renforcemnt learning method 
 
 
 pg.init()
@@ -7,10 +12,9 @@ window = pg.display.set_mode((900, 700))
 
 # Load Cars and road
 car1 = pg.image.load("img/car1.png")
-car2 = pg.image.load("img/car2.png")
 road = pg.image.load("img/road.png")
 
-cars = [car1, car2]
+cars = [car1]
 
 CAR_WIDTH, CAR_HEIGHT = 120, 120
 # initial position of the car images
@@ -19,7 +23,7 @@ road_x, road_y  = 0, 0
 
 # Create a Pygame surface for the road
 road_surface = pg.Surface((road.get_width(), road.get_height()))
-car_speed = 20
+car_speed = 22
 
 while True:
     # Check for keyboard events
