@@ -1,7 +1,7 @@
 import pygame as pg
 
 """
-# I'm trying to write a Ml models who can follow the perfectly and implimente it 
+# I'm trying to write a Ml models who can follow the road perfectly and implimente it 
 # in my Cars this is just some test. It ye what we can call an AI ah ah.
 """
 # By the way it's will use renforcemnt learning method 
