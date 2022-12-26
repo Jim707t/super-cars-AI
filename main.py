@@ -1,5 +1,7 @@
 import pygame as pg
-import math
+
+
+
 
 pg.init()
 window = pg.display.set_mode((900, 700))
