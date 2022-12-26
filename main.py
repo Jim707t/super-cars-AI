@@ -1,56 +1,80 @@
 import pygame as pg
-
-"""
-# I'm trying to write a Ml models who can follow the perfectly and implimente it 
-# in my Cars this is just some test. It ye what we can call an AI ah ah.
-"""
-# By the way it's will use renforcemnt learning method 
-
+import math
 
 pg.init()
 window = pg.display.set_mode((900, 700))
 
-# Load Cars and road
-car1 = pg.image.load("img/car1.png")
-road = pg.image.load("img/road.png")
+blue = (0, 0, 255)
+bg_surface = pg.Surface((900, 700))
+bg_surface.fill(blue)
 
-cars = [car1]
+class Car:
+    def __init__(self, skin, x, y, car_speed, fr, turn_speed, direction, CAR_WIDTH, CAR_HEIGHT):
+        self.skin = skin
+        self.x = x
+        self.y = y
+        self.car_speed = car_speed
+        #  resistive force
+        self.fr = fr
+        self.turn_speed = turn_speed
+        self.direction = direction
+        self.CAR_WIDTH = CAR_WIDTH
+        self.CAR_HEIGHT = CAR_HEIGHT
+        
+class Env:
+    def __init__(self, bg, x, y):
+        self.bg = bg
+        self.x = x
+        self.y = y   
+         
+class Road:
+    def __init__(self, skin, x, y, CAR_WIDTH, CAR_HEIGHT):
+        self.skin = skin
+        self.x = x
+        self.y = y
+        self.CAR_WIDTH = CAR_WIDTH
+        self.CAR_HEIGHT = CAR_HEIGHT
+            
+car1 =  Car(pg.image.load("img/car1.png"), 555, 555, 22, 0, 15, 0, 40, 40)
+env = Env(bg_surface, 0, 0)
+road = Road(pg.image.load("img/road.png"), 0, 0, 900, 700)
 
-CAR_WIDTH, CAR_HEIGHT = 120, 120
-# initial position of the car images
-car_x, car_y = 0, 0
-road_x, road_y  = 0, 0
+print(car1) 
 
-# Create a Pygame surface for the road
-road_surface = pg.Surface((road.get_width(), road.get_height()))
-car_speed = 22
+env_surface = pg.Surface((env.bg.get_width(), env.bg.get_height()))
 
+pg.key.set_repeat(500, 100)
 while True:
-    # Check for keyboard events
+    # Decrease car's speed by Coefficient of Friction
+    car1.car_speed *= (1 - car1.fr)
+    MAX_SPEED = 30
     events = pg.event.get()
     for event in events:
-        
-        # Check if the user pressed a key
-            # Check which key was pressed and update the position of the car
+        if event.type == pg.KEYDOWN:
             if pg.key.get_pressed()[pg.K_LEFT]:
-                car_x -= car_speed
+                car1.x -= car1.car_speed
             if pg.key.get_pressed()[pg.K_RIGHT]:
-                car_x += car_speed
+                car1.x += car1.car_speed
             if pg.key.get_pressed()[pg.K_UP]:
-                car_y -= car_speed
+                car1.y -= car1.car_speed
+                car1.car_speed += 0.2
+                if car1.car_speed > MAX_SPEED:
+                   car1.car_speed = MAX_SPEED
             if pg.key.get_pressed()[pg.K_DOWN]:
-                car_y += car_speed
+                car1.y += car1.car_speed
+                
+            if pg.key.get_pressed()[pg.K_SPACE]:
+                car1.car_speed -= car1.car_speed % 2
 
-    # Blit the road onto the surface
-    road_surface.blit(road, (road_x, road_y))
+    env_surface.blit(env.bg, (env.x, env.y))
     
-    # Add the cars in the road
-    for car in cars:
-        car = pg.transform.scale(car, (CAR_WIDTH, CAR_HEIGHT))
-        road_surface.blit(car, (car_x, car_y))
+    car_s = pg.transform.scale(car1.skin, (car1.CAR_WIDTH, car1.CAR_HEIGHT))
+    road_s = pg.transform.scale(road.skin, (road.CAR_WIDTH, road.CAR_HEIGHT))
+    env_surface.blit(road_s, (0, 0))
+    env_surface.blit(car_s, (car1.x, car1.y))
 
-    # Blit the surface onto the Pygame window
-    window.blit(road_surface, (0, 0))
 
-    # Update the Pygame window
+    window.blit(env_surface, (0, 0)) 
+
+
     pg.display.update()
